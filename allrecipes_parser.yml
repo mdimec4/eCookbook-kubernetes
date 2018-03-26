@@ -38,7 +38,7 @@ items:
     labels:
       app: eCookbook
       jaeger-infra: allrecipes-parser-service
-    annotations: #(miha) request for internal IP
+    #annotations: #(miha) request for internal IP
     #cloud.google.com/load-balancer-type: "Internal"
   spec:
     ports:
