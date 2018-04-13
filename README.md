@@ -34,4 +34,4 @@ To connect to your database directly from outside the K8s cluster:
 
 # allrecipes-parser service
 
- kubectl create -f allrecipes_parser.yml 
+ kubectl create -f eCookbook.yml 
