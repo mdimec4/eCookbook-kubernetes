@@ -3,7 +3,7 @@ k8s templates for eCookbook
 
 # Postgres persistent volume
 
- helm install --name ecookbook-vss-psql --set postgresUser=chef,postgresPassword=chef,postgresDatabase=cookbook stable/postgresql
+  helm install --name ecookbook-vss-psql --set postgresUser=chef,postgresPassword=chef,postgresDatabase=cookbook stable/postgresql
 
  You shuld get output similar to this:
  
@@ -13,14 +13,14 @@ ecookbook-vss-psql-postgresql.default.svc.cluster.local
 
 To get your user password run:
 
-    PGPASSWORD=$(kubectl get secret --namespace default ecookbook-vss-psql-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode; echo)
+  PGPASSWORD=$(kubectl get secret --namespace default ecookbook-vss-psql-postgresql -o jsonpath="{.data.postgres-password}" | base64 --decode; echo)
 
 To connect to your database run the following command (using the env variable from above):
 
-   kubectl run --namespace default ecookbook-vss-psql-postgresql-client --restart=Never --rm --tty -i --image postgres \
-   --env "PGPASSWORD=$PGPASSWORD" \
-   --command -- psql -U chef \
-   -h ecookbook-vss-psql-postgresql cookbook
+  kubectl run --namespace default ecookbook-vss-psql-postgresql-client --restart=Never --rm --tty -i --image postgres \
+  --env "PGPASSWORD=$PGPASSWORD" \
+  --command -- psql -U chef \
+  -h ecookbook-vss-psql-postgresql cookbook
 
 
 
