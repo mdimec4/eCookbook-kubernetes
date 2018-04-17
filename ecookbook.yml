@@ -47,6 +47,8 @@ items:
           env:
             - name: ALLRECIPES_MIDDLEWARE_HOST_PORT
               value: "allrecipes-parser:80"
+            - name: CHEF_DB_HOST
+              value: "ecookbook-vss-psql-postgresql"
           ports:
           - containerPort: 4006
             protocol: TCP #################################
