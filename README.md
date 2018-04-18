@@ -33,6 +33,12 @@ k8s templates for eCookbook
       kubectl port-forward --namespace default $POD_NAME 5432:5432
 ```
 
-# allrecipes-parser service
+# ecookbook and allrecipes-parser service
 
- kubectl create -f eCookbook.yml 
+    kubectl create -f ecookbook.yml 
+
+# vss service
+
+    kubectl create -f vss.yml 
+
+    ** change vss admin pass. from default to saomething new. Example ``chef1234``

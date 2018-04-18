@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vss-cookbook
+  labels:
+    app: ecookbook
+    cookbook-infra: vss-cookbook-service
+spec:
+  type: LoadBalancer
+  ports:
+  - name: digital
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  - name: weblanding
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  - name: http
+    port: 8081
+    protocol: TCP
+    targetPort: 8081
+  - name: newdevices
+    port: 11112
+    protocol: TCP
+    targetPort: 11112
+  - name: olddevices
+    port: 11113
+    protocol: TCP
+    targetPort: 11113
+  selector:
+    cookbook-infra: vss-deployment-pod
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: vss-cookbook
+  labels:
+    app: ecookbook
+    cookbook-infra: vss-cookbook-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ecookbook
+        cookbook-infra: vss-deployment-pod
+    spec:
+      containers:
+      - name: vss
+        image: visionect/visionect-server-v3:4.3.2
+        ports:
+          - containerPort: 80
+          - containerPort: 8081
+          - containerPort: 11112
+          - containerPort: 11113
+        volumeMounts:
+          - mountPath: /dev/fuse
+            name: fuse-dev
+          - mountPath: /dev/shm
+            name: dev-shm
+        env:
+          - name: DB2_1_PORT_5432_TCP_ADDR
+            value: "ecookbook-vss-psql-postgresql"
+            #- name: DB2_1_PORT_5432_TCP_PORT
+            #value: "5432"
+          - name: DB2_1_PORT_5432_TCP_USER
+            value: "chef"
+          - name: DB2_1_PORT_5432_TCP_PASS
+            value: "chef"
+          - name: DB2_1_PORT_5432_TCP_DB
+            value: "cookbook"
+          - name: CONFIG_Engine_Backend_HTML_DefaultFields_url
+            value: http://ecookbook/device
+        livenessProbe:
+          httpGet:
+            path: /api/serverping
+            port: 8081
+          initialDelaySeconds: 10
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            cpu: 500m
+        securityContext:
+          privileged: true
+#          seLinuxOptions:
+#            fsGroup: 1000
+#            level: "s0:c123,c456"
+          capabilities:
+            add:
+              - SYS_ADMIN
+              - MKNOD
+      volumes:
+        - name: fuse-dev
+          hostPath:
+            path: /dev/fuse
+        - name: dev-shm
+          hostPath:
+            path: /dev/shm
