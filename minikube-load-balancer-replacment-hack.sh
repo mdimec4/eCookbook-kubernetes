@@ -12,8 +12,10 @@ killgroup() {
 # this is just an example
 # you need to edit this file to use correct node IP and service node ports
 #
+# TODO
 # https://github.com/kubernetes/minikube/issues/38
-# suggests a tmp solution which would not require manual edition solution in the style of:
+# suggests a tmp solution which would not require manual edition. 
+# Solution is in the style of:
 # socat tcp-listen:8080,reuseaddr,fork tcp:172.17.4.99:$(kubectl get service outyet -o template --template="{{range.spec.ports}}{{.nodePort}}{{end}}")
 # this solution without some modifications is not sufficient for services that expose more then one port
 
